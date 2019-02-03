@@ -71,14 +71,26 @@
 
         let database = firebase.database();
 
+        let sensors = [];
+        database.ref().child("sensors").once("value", function (data) {
+            data.forEach(function (data) {
+                sensors.push(data.val());
+            });
+            localStorage.setItem("sensors", JSON.stringify(sensors));
+        });
+
+        function findSensorLocation(id) {
+            return sensors.filter(x => x.id === id)[0];
+        }
+
         function showTable(parentData) {
-            $("#records").empty();
+            $("#alerts").empty();
             if (parentData) {
                 parentData.forEach(function (data) {
 
                     let alertJSON = data.val();
                     let color = alertJSON["alert_stage"] === "red" ? "white" : "black";
-                    let table_row = $(`<tr style="border-bottom: 1px solid white; color : ${color}"><td>${localStorage.getItem("area")}</td>
+                    let table_row = $(`<tr style="border-bottom: 1px solid white; color : ${color}"><td>${(sensors.filter(x => x.id === alertJSON["sensor"]))[0].name}</td>
                     <td>${alertJSON["alert_stage"]}</td>
                     <td>${alertJSON["smoke_amt"]} ppm</td>
                     <td>${alertJSON["date"]}</td></tr>`);
