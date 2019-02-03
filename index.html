@@ -28,6 +28,12 @@
                     <span class="icon-bar"></span>
                 </button>
             </div>
+            <div class="collapse navbar-collapse" id="myNavbar" style="float: right">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="index.html">Alert Board</a></li>
+                    <li class="active"><a href="records.html">Records</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -98,7 +104,8 @@
 
                     let alertJSON = data.val();
                     let color = alertJSON["alert_stage"] === "red" ? "white" : "black";
-                    let table_row = $(`<tr style="border-bottom: 1px solid white; color : ${color}"><td>${(sensors.filter(x => x.id === alertJSON["sensor"]))[0].name}</td>
+                    localStorage.setItem("area", (sensors.filter(x => x.id === alertJSON["sensor"]))[0].name);
+                    let table_row = $(`<tr style="border-bottom: 1px solid white; color : ${color}"><td>${localStorage.getItem("area")}</td>
                     <td>${alertJSON["alert_stage"]}</td>
                     <td>${alertJSON["smoke_amt"]} ppm</td>
                     <td>${alertJSON["date"]}</td></tr>`);

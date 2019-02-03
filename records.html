@@ -28,7 +28,7 @@
                     <span class="icon-bar"></span>
                 </button>
             </div>
-            <div class="collapse navbar-collapse navbar-left float-left" id="myNavbar">
+            <div class="collapse navbar-collapse" id="myNavbar" style="float: right">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="index.html">Alert Board</a></li>
                     <li class="active"><a href="records.html">Records</a></li>
@@ -38,13 +38,25 @@
     </nav>
 
     <div class="container-fluid" style="margin: 20px">
-        <div class="row" id="alert-board">
-            <h3>Alerts<span id="alert-count"></span></h3>
+        <div class="row" id="records">
+            <h1>Records</h1>
         </div>
         <hr>
 
-        <div class="row">
-           <h3>Records</h3>
+        <div class="row table-responsive">
+            <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Area</th>
+                        <th>Alert Stage</th>
+                        <th>Smoke Amount</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody id="alerts">
+
+                </tbody>
+            </table>
         </div>
     </div>
     <script>
@@ -60,62 +72,23 @@
         let database = firebase.database();
 
         function showTable(parentData) {
-            $("#alerts").empty();
+            $("#records").empty();
             if (parentData) {
                 parentData.forEach(function (data) {
 
                     let alertJSON = data.val();
                     let color = alertJSON["alert_stage"] === "red" ? "white" : "black";
-                    let table_row = $(`<tr style="border-bottom: 1px solid white; color : ${color}"><td>${(sensors.filter(x => x.id === alertJSON["sensor"]))[0].name}</td>
+                    let table_row = $(`<tr style="border-bottom: 1px solid white; color : ${color}"><td>${localStorage.getItem("area")}</td>
                     <td>${alertJSON["alert_stage"]}</td>
                     <td>${alertJSON["smoke_amt"]} ppm</td>
                     <td>${alertJSON["date"]}</td></tr>`);
-
-                    let location_button = $(`<a href="https://www.google.com/maps/search/?api=1&query=${findSensorLocation(alertJSON["sensor"])["latitude"]},
-                    ${findSensorLocation(alertJSON["sensor"])["longitude"]}" target="_a"
-                    style="color: black">View Location</a>`);
-                    let data_button = $(`<button class="btn btn-rounded" style="color: black;">Silence</button>`);
-                    data_button.on("click", function () {
-                        table_row.remove();
-                        clearInterval(red_alert_interval);
-                        deleteAlert(alertJSON["date"], alertJSON["sensor"]);
-                    });
-
-                    table_row.append($(`<td style="color : ${color}"></td>`).append(location_button));
-                    table_row.append($(`<td></td>`).append(data_button));
                     table_row.css("background-color", alertJSON["alert_stage"]);
                     $("#alerts").prepend(table_row);
-
-                    if(alertJSON["alert_stage"] === "yellow") {
-                        document.getElementById("yellow-noti").play();
-                    }
-                    else {
-                        if(red_alert_interval) {
-                            clearInterval(red_alert_interval);
-                        }
-                        red_alert_interval = setInterval(function(){
-                            document.getElementById("red-noti").play();
-                        }, 100);
-                    }
                 });
             }
         }
 
-        database.ref().child("alerts").on("value", showTable);
-
-        // deletes in firebase
-        function deleteAlert(date, deviceID) {
-            database.ref().child("alerts").once("value", function (parentData) {
-                if (parentData) {
-                    parentData.forEach(function (data) {
-                        json_val = data.val();
-                        if (json_val["date"] === date && json_val["sensor"] === deviceID) {
-                            data.ref.remove();
-                        }
-                    });
-                }
-            });
-        }
+        database.ref().child("records").on("value", showTable);
     </script>
 </body>
 
