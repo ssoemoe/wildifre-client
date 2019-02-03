@@ -91,6 +91,7 @@
 
         function showTable(parentData) {
             $("#alerts").empty();
+            document.getElementById("red-noti").stop();
             if (parentData) {
                 parentData.forEach(function (data) {
 
@@ -121,6 +122,7 @@
                     }
                     else {
                         if(red_alert_interval) {
+                            document.getElementById("red-noti").stop();
                             clearInterval(red_alert_interval);
                         }
                         red_alert_interval = setInterval(function(){
