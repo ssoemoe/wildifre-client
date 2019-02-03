@@ -28,45 +28,26 @@
                     <span class="icon-bar"></span>
                 </button>
             </div>
+            <div class="collapse navbar-collapse navbar-left float-left" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="index.html">Alert Board</a></li>
+                    <li class="active"><a href="records.html">Records</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <div class="container-fluid" style="margin: 20px">
         <div class="row" id="alert-board">
-            <h1>Alert Board<span id="alert-count"></span></h1>
+            <h3>Alerts<span id="alert-count"></span></h3>
         </div>
         <hr>
 
         <div class="row">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Area</th>
-                            <th>Alert Stage</th>
-                            <th>Smoke Amount</th>
-                            <th>Timestamp</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="alerts">
-
-                    </tbody>
-                </table>
-
-                <audio id="yellow-noti">
-                    <source src="audio/plucky.mp3" type="audio/mp3">
-                    </source>
-                </audio>
-                <audio id="red-noti">
-                    <source src="audio/fire-alarm.mp3" type="audio/mp3">
-                    </source>
-                </audio>
-            </div>
+           <h3>Records</h3>
         </div>
     </div>
     <script>
-        var red_alert_interval = null;
 
         var config = {
             apiKey: "AIzaSyCumDWx7asYqgOQDWBLNDveYdeGHr-Jh8c",
@@ -77,17 +58,6 @@
         firebase.initializeApp(config);
 
         let database = firebase.database();
-        let sensors = [];
-        database.ref().child("sensors").once("value", function (data) {
-            data.forEach(function (data) {
-                sensors.push(data.val());
-            });
-            localStorage.setItem("sensors", JSON.stringify(sensors));
-        });
-
-        function findSensorLocation(id) {
-            return sensors.filter(x => x.id === id)[0];
-        }
 
         function showTable(parentData) {
             $("#alerts").empty();

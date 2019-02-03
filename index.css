@@ -1,0 +1,40 @@
+body {
+    font-family: 'Vollkorn', serif;
+    font-size: 20px;
+}
+
+#navbar {
+    padding: 20px;
+    background-color: darkred;
+}
+
+#nav-btn {
+    background-color: white;
+}
+
+.row {
+    margin: 25px;
+}
+
+.navbar a {
+    color: white;
+    border-radius: 10px;
+}
+
+#myNavbar a:hover {
+   background-color: red;
+}
+
+li {
+    border-radius: 10px;
+}
+
+
+#alerts thead {
+    background-color: blanchedalmond;
+    border-radius: 10px;
+}
+
+td {
+    padding: 10px;
+}
